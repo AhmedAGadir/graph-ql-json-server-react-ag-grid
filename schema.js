@@ -4,7 +4,8 @@ const {
     GraphQLInt,
     GraphQLList,
     GraphQLSchema,
-    GraphQLNonNull
+    GraphQLNonNull,
+    GraphQLBoolean
 } = require('graphql');
 
 const axios = require('axios');
@@ -33,13 +34,22 @@ const AthleteType = new GraphQLObjectType({
         bronze: { type: GraphQLInt },
         total: { type: GraphQLInt },
     })
+});
+
+const ResponseType = new GraphQLObjectType({
+    name: 'Response',
+    fields: () => ({
+        success: { type: GraphQLBoolean },
+        rows: { type: new GraphQLList(AthleteType) },
+        lastRow: { type: GraphQLBoolean },
+    })
 })
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        athletes: {
-            type: new GraphQLList(AthleteType),
+        response: {
+            type: ResponseType,
             args: {
                 // ** non-nulls are requires **
                 startRow: { type: GraphQLNonNull(GraphQLInt) },
@@ -54,11 +64,27 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parentValue, args) {
                 return axios.get(`http://localhost:3000/athletes?_start=${args.startRow}&_end=${args.endRow}`)
-                    .then(res => res.data)
+                    .then(res => {
+                        return {
+                            success: true,
+                            rows: res.data,
+                            lastRow: args.endRow == res.headers["x-total-count"]
+                        }
+                    })
                     .catch(err => console.log(err));
             }
         },
 
+
+        // athletes: {
+        //     type: new GraphQLList(AthleteType),
+        //     resolve(parentValue, args) {
+        //         console.log('athletes called', parentValue, args)
+        //         return axios.get(`http://localhost:3000/athletes`)
+        //             .then(res => res.data)
+        //             .catch(err => console.log(err));
+        //     }
+        // },
 
     }
 })
