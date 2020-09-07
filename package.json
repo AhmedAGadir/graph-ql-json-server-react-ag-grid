@@ -1,0 +1,23 @@
+{
+  "name": "graph-ql-json-server-react-ag-grid",
+  "version": "1.0.0",
+  "description": "ag-grid server side row model post using graphql apollo json server and react",
+  "main": "server.js",
+  "scripts": {
+    "dev:server": "nodemon server.js",
+    "json:server": "json-server --watch data.json",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run dev:server\" \"npm run json:server\" \"npm run client\""
+  },
+  "author": "Ahmed Gadir",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "concurrently": "^5.3.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^15.3.0",
+    "json-server": "^0.16.1",
+    "nodemon": "^2.0.4"
+  }
+}
