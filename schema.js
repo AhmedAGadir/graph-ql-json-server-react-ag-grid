@@ -40,15 +40,15 @@ const ResponseType = new GraphQLObjectType({
     name: 'Response',
     fields: () => ({
         success: { type: GraphQLBoolean },
+        lastRow: { type: GraphQLInt },
         rows: { type: new GraphQLList(AthleteType) },
-        lastRow: { type: GraphQLBoolean },
     })
 })
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        response: {
+        getRows: {
             type: ResponseType,
             args: {
                 // ** non-nulls are requires **
@@ -68,24 +68,12 @@ const RootQuery = new GraphQLObjectType({
                         return {
                             success: true,
                             rows: res.data,
-                            lastRow: args.endRow == res.headers["x-total-count"]
+                            lastRow: res.headers["x-total-count"]
                         }
                     })
                     .catch(err => console.log(err));
             }
         },
-
-
-        // athletes: {
-        //     type: new GraphQLList(AthleteType),
-        //     resolve(parentValue, args) {
-        //         console.log('athletes called', parentValue, args)
-        //         return axios.get(`http://localhost:3000/athletes`)
-        //             .then(res => res.data)
-        //             .catch(err => console.log(err));
-        //     }
-        // },
-
     }
 })
 
