@@ -54,12 +54,12 @@ const RootQuery = new GraphQLObjectType({
                 // ** non-nulls are requires **
                 startRow: { type: GraphQLNonNull(GraphQLInt) },
                 endRow: { type: GraphQLNonNull(GraphQLInt) },
+                // sortModel: []
                 // filterModel: {}
                 // groupKeys: []
                 // pivotCols: []
                 // pivotMode: false
                 // rowGroupCols: []
-                // sortModel: []
                 // valueCols: []
             },
             resolve(parentValue, args) {
