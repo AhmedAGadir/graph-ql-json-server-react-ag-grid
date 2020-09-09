@@ -39,13 +39,14 @@ export const createServerSideDatasource = function () {
             sortModel = sortModel.length > 0 ? sortModel : undefined;
             const visibleColumnIds: string[] = params.columnApi.getAllDisplayedColumns().map(col => col.getColId());
 
+            console.log(startRow, endRow)
             client.query({
                 query: gql`
-                    query RowsQuery($startRow: Int!, $endRow: Int!, $sortModel: [SortModel]) {
-                        getRows(startRow: startRow, endRow: endRow, sortModel: sortModel) {
+                    query Rows($startRow: Int!, $endRow: Int!, $sortModel: [SortModel]) {
+                        getRows(startRow: $startRow, endRow: $endRow, sortModel: $sortModel) {
                             lastRow
-                            rows {
-                                ${visibleColumnIds}.join('\n')
+                            rows { 
+                                ${visibleColumnIds.join('\n')}
                             }
                         }
                     }
