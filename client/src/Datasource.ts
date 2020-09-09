@@ -39,7 +39,6 @@ export const createServerSideDatasource = function () {
             sortModel = sortModel.length > 0 ? sortModel : undefined;
             const visibleColumnIds: string[] = params.columnApi.getAllDisplayedColumns().map(col => col.getColId());
 
-            console.log(startRow, endRow)
             client.query({
                 query: gql`
                     query Rows($startRow: Int!, $endRow: Int!, $sortModel: [SortModel]) {
