@@ -4,6 +4,7 @@
   "description": "ag-grid server side row model post using graphql apollo json server and react",
   "main": "server.js",
   "scripts": {
+    "client-dependencies": "npm install --prefix client",
     "dev:server": "nodemon server.js",
     "json:server": "json-server --watch data.json",
     "client": "npm start --prefix client",
