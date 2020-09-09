@@ -82,16 +82,6 @@ const RootQuery = new GraphQLObjectType({
                     endPoint += `&_start=${args.startRow}&_end=${args.endRow}`;
                 }
 
-                // if (args.sortModel) {
-                //     endPoint += `_sort=${args.sortModel.coId}&_order=${args.sortModel.sort}`;
-                // };
-
-                // if (args.sortModel) {
-                //     endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
-                // } else {
-                //     endPoint += `&_start=${args.startRow}&_end=${args.endRow}`;
-                // }
-
                 return axios.get(endPoint)
                     .then(res => {
                         return {
