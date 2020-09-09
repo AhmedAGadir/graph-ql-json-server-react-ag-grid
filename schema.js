@@ -5,16 +5,18 @@ const {
     GraphQLList,
     GraphQLSchema,
     GraphQLNonNull,
-    GraphQLBoolean
+    GraphQLBoolean,
+    GraphQLInputObjectType
 } = require('graphql');
 
 const axios = require('axios');
 
 
 
-const OlympicWinnersType = new GraphQLObjectType({
-    name: 'OlympicWinners',
+const OlympicWinnerType = new GraphQLObjectType({
+    name: 'OlympicWinner',
     fields: () => ({
+        id: { type: GraphQLString },
         athlete: { type: GraphQLString },
         age: { type: GraphQLInt },
         country: { type: GraphQLString },
@@ -32,9 +34,17 @@ const ResponseType = new GraphQLObjectType({
     name: 'Response',
     fields: () => ({
         lastRow: { type: GraphQLInt },
-        rows: { type: new GraphQLList(OlympicWinnersType) },
+        rows: { type: new GraphQLList(OlympicWinnerType) },
     })
 })
+
+const SortModelType = new GraphQLInputObjectType({
+    name: 'SortModel',
+    fields: () => ({
+        colId: { type: GraphQLString },
+        sort: { type: GraphQLString },
+    })
+});
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -45,7 +55,7 @@ const RootQuery = new GraphQLObjectType({
                 // ** non-nulls are required **
                 startRow: { type: GraphQLNonNull(GraphQLInt) },
                 endRow: { type: GraphQLNonNull(GraphQLInt) },
-                // sortModel: []
+                sortModel: { type: new GraphQLList(SortModelType) }
                 // filterModel: {}
                 // groupKeys: []
                 // pivotCols: []
@@ -54,7 +64,35 @@ const RootQuery = new GraphQLObjectType({
                 // valueCols: []
             },
             resolve(parentValue, args) {
-                return axios.get(`http://localhost:3000/olympicWinners?_start=${args.startRow}&_end=${args.endRow}`)
+                let endPoint = `http://localhost:3000/olympicWinners?`;
+
+                if (args.sortModel && args.sortModel.length > 0) {
+                    const fields = [];
+                    const orders = [];
+                    args.sortModel.forEach(sM => {
+                        fields.push(sM.colId);
+                        orders.push(sM.sort)
+                    });
+                    endPoint += `_sort=${fields.join(',')}&_order=${orders.join(',')}`;
+                };
+
+                if (args.sortModel && args.sortModel.length > 0) {
+                    endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
+                } else {
+                    endPoint += `&_start=${args.startRow}&_end=${args.endRow}`;
+                }
+
+                // if (args.sortModel) {
+                //     endPoint += `_sort=${args.sortModel.coId}&_order=${args.sortModel.sort}`;
+                // };
+
+                // if (args.sortModel) {
+                //     endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
+                // } else {
+                //     endPoint += `&_start=${args.startRow}&_end=${args.endRow}`;
+                // }
+
+                return axios.get(endPoint)
                     .then(res => {
                         return {
                             rows: res.data,
@@ -65,9 +103,38 @@ const RootQuery = new GraphQLObjectType({
             }
         },
     }
+});
+
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        updateOlympicWinner: {
+            type: OlympicWinnerType,
+            args: {
+                /* Only the ID is required */
+                id: { type: GraphQLNonNull(GraphQLString) },
+                athlete: { type: GraphQLString },
+                age: { type: GraphQLInt },
+                country: { type: GraphQLString },
+                year: { type: GraphQLInt },
+                date: { type: GraphQLString },
+                sport: { type: GraphQLString },
+                gold: { type: GraphQLInt },
+                silver: { type: GraphQLInt },
+                bronze: { type: GraphQLInt },
+                total: { type: GraphQLInt },
+            },
+            resolve(parentValue, args) {
+                return axios.patch(`http://localhost:3000/olympicWinners/${args.id}`, args)
+                    .then(res => res.data)
+                    .catch(err => console.log(err));
+            }
+        }
+    }
 })
 
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 })

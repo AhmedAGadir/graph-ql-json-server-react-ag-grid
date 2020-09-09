@@ -1,4 +1,4 @@
-{
+export default {
     "olympicWinners": [
         {
             "athlete": "Michael Phelps",
