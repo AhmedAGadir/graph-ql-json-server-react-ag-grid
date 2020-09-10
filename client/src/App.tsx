@@ -21,7 +21,7 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 import "ag-grid-enterprise";
 import './App.css';
 
-// import axios from "axios
+// import axios from "axios";
 
 
 const App: FunctionComponent = (): React.ReactElement => {
@@ -46,7 +46,7 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const defaultColDef: ColDef = {
     sortable: true,
-    editable: true,
+    // editable: true,
     resizable: true
   }
 
@@ -73,6 +73,8 @@ const App: FunctionComponent = (): React.ReactElement => {
     defaultToolPanel: 'columns',
   }
 
+  const getRowNodeId = (data: IOlympicWinner) => data.id;
+
   const onGridReady = (params: GridReadyEvent) => {
     setGridApi(params.api);
     setColumnApi(params.columnApi);
@@ -90,20 +92,46 @@ const App: FunctionComponent = (): React.ReactElement => {
     params.api.purgeServerSideCache();
   }
 
-  const onCellEditingStopped = (params: CellEditingStoppedEvent) => {
-    console.log('onCellEditingStopped')
-    debugger;
-    // this.gridApi.serverSideRowModel.datasource.updateRow({
-    //   id: params.node.id,
-    //   field: params.column.colId,
-    //   value: params.value
-    // });
-    // params.api.purgeServerSideCache();
-  }
+  const updateSelectedRow = () => {
+    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
+    if (selectedNodes.length === 0) {
+      alert('Select a row first');
+      return;
+    }
+    const selectedRow: RowNode = selectedNodes[0].data;
 
-  const addRow = () => {
+    const updatedRow: IOlympicWinner = {
+      id: selectedRow.id,
+      athlete: 'Ahmed Gadir',
+      age: 26,
+      country: 'United Kingdom',
+      year: 2020,
+      date: '11/09/2020',
+      sport: 'Brazilian Jiu Jitsu',
+      gold: 10,
+      silver: 0,
+      bronze: 0,
+      total: 10
+    }
 
-  }
+    datasource
+      .updateRow(
+        updatedRow.id,
+        updatedRow.athlete,
+        updatedRow.age,
+        updatedRow.country,
+        updatedRow.year,
+        updatedRow.date,
+        updatedRow.sport,
+        updatedRow.gold,
+        updatedRow.silver,
+        updatedRow.bronze,
+        updatedRow.total)
+      .then((res) => {
+        gridApi.purgeServerSideCache();
+      })
+      .catch((err: Error) => console.log('error', err));
+  };
 
   const deleteSelectedRow = () => {
     const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
@@ -118,26 +146,24 @@ const App: FunctionComponent = (): React.ReactElement => {
       .then(() => {
         gridApi.purgeServerSideCache();
       })
-      .catch(err => {
+      .catch((err: Error) => {
         console.log('Error', err);
       });
   }
-
-  const getRowNodeId = (data: IOlympicWinner) => data.id;
 
   return (
     <div className="container my-4">
       <h3>ag-Grid Server Side Row Model + GraphQL + Apollo + JSON Server</h3>
       <div className="card my-3">
         <div className="card-body">
-          <button onClick={addRow} type="button" className="btn btn-secondary mx-2">Add Row</button>
+          <button onClick={updateSelectedRow} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>
           <button onClick={deleteSelectedRow} type="button" className="btn btn-secondary mx-2">Delete Selected Row</button>
           <button onClick={() => { gridApi.purgeServerSideCache() }} type="button" className="btn btn-secondary mx-2">Purge SS Cache</button>
         </div>
       </div>
       <div
         id="myGrid"
-        style={{ height: "100vh" }}
+        style={{ height: "calc(100vh - 250px)" }}
         className="ag-theme-alpine-dark">
         <AgGridReact
           columnDefs={columnDefs}
@@ -146,7 +172,7 @@ const App: FunctionComponent = (): React.ReactElement => {
           onGridReady={onGridReady}
           onColumnVisible={onColumnVisible}
           onSortChanged={onSortChanged}
-          onCellEditingStopped={onCellEditingStopped}
+          // onCellEditingStopped={onCellEditingStopped}
           // editType="fullRow"
           sideBar={sideBar}
           rowSelection="single"

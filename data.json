@@ -1,6 +1,45 @@
 {
   "olympicWinners": [
     {
+      "athlete": "Ahmed Gadir",
+      "age": 23,
+      "country": "United States",
+      "year": 2008,
+      "date": "24/08/2008",
+      "sport": "Swimming",
+      "gold": 8,
+      "silver": 0,
+      "bronze": 0,
+      "total": 8,
+      "id": "0"
+    },
+    {
+      "athlete": "Ahmed Gadir",
+      "age": 19,
+      "country": "United Kingdom",
+      "year": 2020,
+      "date": "11/09/2020",
+      "sport": "Brazilian Jiu Jitsu",
+      "gold": 10,
+      "silver": 0,
+      "bronze": 0,
+      "total": 10,
+      "id": "1"
+    },
+    {
+      "athlete": "Michael Phelps",
+      "age": 27,
+      "country": "United States",
+      "year": 2012,
+      "date": "12/08/2012",
+      "sport": "Swimming",
+      "gold": 4,
+      "silver": 2,
+      "bronze": 0,
+      "total": 6,
+      "id": "2"
+    },
+    {
       "athlete": "Natalie Coughlin",
       "age": 25,
       "country": "United States",

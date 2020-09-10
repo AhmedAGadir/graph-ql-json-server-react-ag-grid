@@ -22,8 +22,7 @@ const client = new ApolloClient({
 export const createServerSideDatasource = function (): IServerSideDatasourceWithCRUD {
     return {
         getRows: function (params: IServerSideGetRowsParams) {
-            console.log('Request', params.request);
-
+            console.log('Request', params.request)
             let {
                 startRow,
                 endRow,
@@ -66,11 +65,11 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                     params.failCallback();
                 });
         },
-        deleteRow(id: string) {
+        deleteRow(id: string): Promise<any> {
             return client.mutate({
                 mutation: gql`
                     mutation DeleteRow($id: ID!) {
-                        deleteRow(id: $id) {
+                        deleteRow(id: $id) {                             
                             id
                             athlete
                             age
@@ -81,8 +80,7 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                             gold
                             silver
                             bronze
-                            total
-                        }
+                            total}
                     }
                     `,
                 variables: {
@@ -93,8 +91,74 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                     return res.data.deleteRow;
                 })
                 .catch(err => console.log('err', err));
+        },
+        updateRow(id: string,
+            athlete?: string,
+            age?: number,
+            country?: string,
+            year?: number,
+            date?: string,
+            sport?: string,
+            gold?: number,
+            silver?: number,
+            bronze?: number,
+            total?: number): Promise<any> {
+            return client.mutate({
+                mutation: gql`
+                    mutation UpdateRow(
+                        $id: ID!, 
+                        $athlete: String, 
+                        $country: String, 
+                        $year: Int, 
+                        $date: String, 
+                        $sport: String,  
+                        $gold: Int, 
+                        $silver: Int, 
+                        $bronze: Int, 
+                        $total: Int) {
+                        updateRow(
+                            id: $id, 
+                            athlete: $athlete, 
+                            country: $country, 
+                            year: $year, 
+                            date: $date, 
+                            sport: $sport  
+                            gold: $gold, 
+                            silver: $silver, 
+                            bronze: $bronze, 
+                            total: $total) {  
+                                id
+                                athlete
+                                age
+                                country
+                                year
+                                date
+                                sport
+                                gold
+                                silver
+                                bronze
+                                total
+                        }
+                    }
+                    `,
+                variables: {
+                    id,
+                    athlete,
+                    age,
+                    country,
+                    year,
+                    date,
+                    sport,
+                    gold,
+                    silver,
+                    bronze,
+                    total
+                }
+            })
+                .then(res => {
+                    return res.data.updateRow;
+                })
+                .catch(err => console.log('err', err));
         }
-        // updateRow(params) {
-        // }
     };
 }

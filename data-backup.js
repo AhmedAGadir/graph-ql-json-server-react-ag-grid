@@ -1,5 +1,4 @@
-export default {
-    "olympicWinners": [
+export default [
         {
           "athlete": "Michael Phelps",
           "age": 23,
@@ -112035,4 +112034,3 @@ export default {
           "id": "8617"
         }
       ]
-}

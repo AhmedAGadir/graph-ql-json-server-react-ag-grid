@@ -112,7 +112,7 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        updateOlympicWinner: {
+        updateRow: {
             type: OlympicWinnerType,
             args: {
                 /* Only the ID is required */
