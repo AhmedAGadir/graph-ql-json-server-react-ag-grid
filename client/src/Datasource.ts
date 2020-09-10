@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { gql } from '@apollo/client';
 import { IServerSideGetRowsParams, IServerSideGetRowsRequest } from 'ag-grid-community';
 // @ts-ignore
-import { IOlympicWinner } from './interfaces';
+import { IOlympicWinner, IServerSideDatasourceWithCRUD } from './interfaces';
 
 const client = new ApolloClient({
     uri: 'http://localhost:5000/graphql',
@@ -19,7 +19,7 @@ const client = new ApolloClient({
 // sortModel: []
 // valueCols: []
 
-export const createServerSideDatasource = function () {
+export const createServerSideDatasource = function (): IServerSideDatasourceWithCRUD {
     return {
         getRows: function (params: IServerSideGetRowsParams) {
             console.log('Request', params.request);
@@ -41,7 +41,7 @@ export const createServerSideDatasource = function () {
 
             client.query({
                 query: gql`
-                    query Rows($startRow: Int!, $endRow: Int!, $sortModel: [SortModel]) {
+                    query GetRows($startRow: Int!, $endRow: Int!, $sortModel: [SortModel]) {
                         getRows(startRow: $startRow, endRow: $endRow, sortModel: $sortModel) {
                             lastRow
                             rows { 
@@ -66,8 +66,35 @@ export const createServerSideDatasource = function () {
                     params.failCallback();
                 });
         },
+        deleteRow(id: string) {
+            return client.mutate({
+                mutation: gql`
+                    mutation DeleteRow($id: ID!) {
+                        deleteRow(id: $id) {
+                            id
+                            athlete
+                            age
+                            country
+                            year
+                            date
+                            sport
+                            gold
+                            silver
+                            bronze
+                            total
+                        }
+                    }
+                    `,
+                variables: {
+                    id
+                }
+            })
+                .then(res => {
+                    return res.data.deleteRow;
+                })
+                .catch(err => console.log('err', err));
+        }
         // updateRow(params) {
-
         // }
     };
 }

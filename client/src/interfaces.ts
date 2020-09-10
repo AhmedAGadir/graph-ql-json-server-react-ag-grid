@@ -1,3 +1,5 @@
+import { IServerSideDatasource } from 'ag-grid-community';
+
 export interface IOlympicWinner {
     id: string,
     athlete: string,
@@ -10,4 +12,8 @@ export interface IOlympicWinner {
     silver: number,
     bronze: number,
     total: number
+}
+
+export interface IServerSideDatasourceWithCRUD extends IServerSideDatasource {
+    deleteRow(id: string): Promise<IOlympicWinner>
 }

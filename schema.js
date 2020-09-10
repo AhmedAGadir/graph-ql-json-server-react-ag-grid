@@ -5,18 +5,41 @@ const {
     GraphQLList,
     GraphQLSchema,
     GraphQLNonNull,
-    GraphQLBoolean,
-    GraphQLInputObjectType
+    GraphQLInputObjectType,
+    GraphQLID
 } = require('graphql');
 
 const axios = require('axios');
 
 
+const JSON_SERVER_ENDPOINT = `http://localhost:3000/olympicWinners`;
+
+function isRequestSorting(sortModel) {
+    return sortModel && sortModel.length > 0;
+}
+
+function getSortingEndPoint(args) {
+    let endPoint = JSON_SERVER_ENDPOINT;
+
+    const fields = [];
+    const orders = [];
+    args.sortModel.forEach(sM => {
+        fields.push(sM.colId);
+        orders.push(sM.sort)
+    });
+
+    // sorting
+    endPoint += `?_sort=${fields.join(',')}&_order=${orders.join(',')}`;
+    // starting from start row with a limit of endRow - startRows rows
+    endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
+
+    return endPoint;
+}
 
 const OlympicWinnerType = new GraphQLObjectType({
     name: 'OlympicWinner',
     fields: () => ({
-        id: { type: GraphQLString },
+        id: { type: GraphQLID },
         athlete: { type: GraphQLString },
         age: { type: GraphQLInt },
         country: { type: GraphQLString },
@@ -64,22 +87,13 @@ const RootQuery = new GraphQLObjectType({
                 // valueCols: []
             },
             resolve(parentValue, args) {
-                let endPoint = `http://localhost:3000/olympicWinners?`;
 
-                if (args.sortModel && args.sortModel.length > 0) {
-                    const fields = [];
-                    const orders = [];
-                    args.sortModel.forEach(sM => {
-                        fields.push(sM.colId);
-                        orders.push(sM.sort)
-                    });
-                    endPoint += `_sort=${fields.join(',')}&_order=${orders.join(',')}`;
-                };
+                let endPoint;
 
-                if (args.sortModel && args.sortModel.length > 0) {
-                    endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
+                if (isRequestSorting(args.sortModel)) {
+                    endPoint = getSortingEndPoint(args);
                 } else {
-                    endPoint += `&_start=${args.startRow}&_end=${args.endRow}`;
+                    endPoint = JSON_SERVER_ENDPOINT + `?_start=${args.startRow}&_end=${args.endRow}`;
                 }
 
                 return axios.get(endPoint)
@@ -102,7 +116,7 @@ const Mutation = new GraphQLObjectType({
             type: OlympicWinnerType,
             args: {
                 /* Only the ID is required */
-                id: { type: GraphQLNonNull(GraphQLString) },
+                id: { type: GraphQLNonNull(GraphQLID) },
                 athlete: { type: GraphQLString },
                 age: { type: GraphQLInt },
                 country: { type: GraphQLString },
@@ -118,6 +132,17 @@ const Mutation = new GraphQLObjectType({
                 return axios.patch(`http://localhost:3000/olympicWinners/${args.id}`, args)
                     .then(res => res.data)
                     .catch(err => console.log(err));
+            }
+        },
+        deleteRow: {
+            type: OlympicWinnerType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parentValue, args) {
+                return axios.delete(`http://localhost:3000/olympicWinners/${args.id}`)
+                    .then(res => res.data)
+                    .catch(err => console.log(err))
             }
         }
     }

@@ -1,9 +1,19 @@
 import React, { FunctionComponent, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
-import { GridApi, ColumnApi, GridReadyEvent, ColDef, SideBarDef, ColumnVisibleEvent, SortChangedEvent, CellEditingStoppedEvent } from "ag-grid-community";
+import {
+  GridApi,
+  ColumnApi,
+  GridReadyEvent,
+  ColDef,
+  SideBarDef,
+  ColumnVisibleEvent,
+  SortChangedEvent,
+  CellEditingStoppedEvent,
+  RowNode
+} from "ag-grid-community";
 
-// @ts-ignore
-import { createServerSideDatasource } from './Datasource.ts';
+import { IOlympicWinner, IServerSideDatasourceWithCRUD } from "./interfaces";
+import { createServerSideDatasource } from './Datasource';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
@@ -11,14 +21,17 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 import "ag-grid-enterprise";
 import './App.css';
 
-
 // import axios from "axios
+
 
 const App: FunctionComponent = (): React.ReactElement => {
   const [gridApi, setGridApi] = useState<GridApi>(null);
   const [columnApi, setColumnApi] = useState<ColumnApi>(null);
 
+  const datasource: IServerSideDatasourceWithCRUD = createServerSideDatasource();
+
   const columnDefs: ColDef[] = [
+    { headerName: 'ID', field: 'id', editable: false, maxWidth: 100 },
     { field: "athlete" },
     { field: "age", hide: true, },
     { field: "country" },
@@ -33,7 +46,8 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const defaultColDef: ColDef = {
     sortable: true,
-    editable: true
+    editable: true,
+    resizable: true
   }
 
   const sideBar: SideBarDef = {
@@ -63,9 +77,7 @@ const App: FunctionComponent = (): React.ReactElement => {
     setGridApi(params.api);
     setColumnApi(params.columnApi);
 
-    const datasource = createServerSideDatasource();
     params.api.setServerSideDatasource(datasource);
-
     params.api.sizeColumnsToFit();
   }
 
@@ -89,12 +101,43 @@ const App: FunctionComponent = (): React.ReactElement => {
     // params.api.purgeServerSideCache();
   }
 
+  const addRow = () => {
+
+  }
+
+  const deleteSelectedRow = () => {
+    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
+    if (selectedNodes.length === 0) {
+      alert('Select a row first');
+      return;
+    }
+    const selectedRowId: string = selectedNodes[0].id;
+
+    datasource
+      .deleteRow(selectedRowId)
+      .then(() => {
+        gridApi.purgeServerSideCache();
+      })
+      .catch(err => {
+        console.log('Error', err);
+      });
+  }
+
+  const getRowNodeId = (data: IOlympicWinner) => data.id;
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div className="container my-4">
+      <h3>ag-Grid Server Side Row Model + GraphQL + Apollo + JSON Server</h3>
+      <div className="card my-3">
+        <div className="card-body">
+          <button onClick={addRow} type="button" className="btn btn-secondary mx-2">Add Row</button>
+          <button onClick={deleteSelectedRow} type="button" className="btn btn-secondary mx-2">Delete Selected Row</button>
+          <button onClick={() => { gridApi.purgeServerSideCache() }} type="button" className="btn btn-secondary mx-2">Purge SS Cache</button>
+        </div>
+      </div>
       <div
         id="myGrid"
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "100vh" }}
         className="ag-theme-alpine-dark">
         <AgGridReact
           columnDefs={columnDefs}
@@ -106,6 +149,8 @@ const App: FunctionComponent = (): React.ReactElement => {
           onCellEditingStopped={onCellEditingStopped}
           // editType="fullRow"
           sideBar={sideBar}
+          rowSelection="single"
+          getRowNodeId={getRowNodeId}
         />
       </div>
     </div>
