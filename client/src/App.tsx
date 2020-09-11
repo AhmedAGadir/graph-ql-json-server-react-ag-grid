@@ -92,6 +92,24 @@ const App: FunctionComponent = (): React.ReactElement => {
     params.api.purgeServerSideCache();
   }
 
+  const deleteSelectedRow = () => {
+    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
+    if (selectedNodes.length === 0) {
+      alert('Select a row first');
+      return;
+    }
+    const selectedRowId: string = selectedNodes[0].id;
+
+    datasource
+      .deleteRow(selectedRowId)
+      .then(() => {
+        gridApi.purgeServerSideCache();
+      })
+      .catch((err: Error) => {
+        console.log('Error', err);
+      });
+  }
+
   const updateSelectedRow = () => {
     const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
     if (selectedNodes.length === 0) {
@@ -115,41 +133,12 @@ const App: FunctionComponent = (): React.ReactElement => {
     }
 
     datasource
-      .updateRow(
-        updatedRow.id,
-        updatedRow.athlete,
-        updatedRow.age,
-        updatedRow.country,
-        updatedRow.year,
-        updatedRow.date,
-        updatedRow.sport,
-        updatedRow.gold,
-        updatedRow.silver,
-        updatedRow.bronze,
-        updatedRow.total)
-      .then((res) => {
+      .updateRow(updatedRow)
+      .then(() => {
         gridApi.purgeServerSideCache();
       })
       .catch((err: Error) => console.log('error', err));
   };
-
-  const deleteSelectedRow = () => {
-    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
-    if (selectedNodes.length === 0) {
-      alert('Select a row first');
-      return;
-    }
-    const selectedRowId: string = selectedNodes[0].id;
-
-    datasource
-      .deleteRow(selectedRowId)
-      .then(() => {
-        gridApi.purgeServerSideCache();
-      })
-      .catch((err: Error) => {
-        console.log('Error', err);
-      });
-  }
 
   return (
     <div className="container my-4">

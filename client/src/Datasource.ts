@@ -92,41 +92,11 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                 })
                 .catch(err => console.log('err', err));
         },
-        updateRow(id: string,
-            athlete?: string,
-            age?: number,
-            country?: string,
-            year?: number,
-            date?: string,
-            sport?: string,
-            gold?: number,
-            silver?: number,
-            bronze?: number,
-            total?: number): Promise<any> {
+        updateRow(data: IOlympicWinner): Promise<any> {
             return client.mutate({
                 mutation: gql`
-                    mutation UpdateRow(
-                        $id: ID!, 
-                        $athlete: String, 
-                        $country: String, 
-                        $year: Int, 
-                        $date: String, 
-                        $sport: String,  
-                        $gold: Int, 
-                        $silver: Int, 
-                        $bronze: Int, 
-                        $total: Int) {
-                        updateRow(
-                            id: $id, 
-                            athlete: $athlete, 
-                            country: $country, 
-                            year: $year, 
-                            date: $date, 
-                            sport: $sport  
-                            gold: $gold, 
-                            silver: $silver, 
-                            bronze: $bronze, 
-                            total: $total) {  
+                    mutation UpdateRow($data: OlympicWinnerInput!) {
+                        updateRow(data: $data) {  
                                 id
                                 athlete
                                 age
@@ -142,17 +112,7 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                     }
                     `,
                 variables: {
-                    id,
-                    athlete,
-                    age,
-                    country,
-                    year,
-                    date,
-                    sport,
-                    gold,
-                    silver,
-                    bronze,
-                    total
+                    data
                 }
             })
                 .then(res => {

@@ -1,7 +1,7 @@
 {
   "olympicWinners": [
     {
-      "athlete": "Ahmed Gadir",
+      "athlete": "Michael Phelps",
       "age": 23,
       "country": "United States",
       "year": 2008,
@@ -14,16 +14,16 @@
       "id": "0"
     },
     {
-      "athlete": "Ahmed Gadir",
+      "athlete": "Michael Phelps",
       "age": 19,
-      "country": "United Kingdom",
-      "year": 2020,
-      "date": "11/09/2020",
-      "sport": "Brazilian Jiu Jitsu",
-      "gold": 10,
+      "country": "United States",
+      "year": 2004,
+      "date": "29/08/2004",
+      "sport": "Swimming",
+      "gold": 6,
       "silver": 0,
-      "bronze": 0,
-      "total": 10,
+      "bronze": 2,
+      "total": 8,
       "id": "1"
     },
     {

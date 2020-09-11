@@ -53,6 +53,23 @@ const OlympicWinnerType = new GraphQLObjectType({
     })
 });
 
+const OlympicWinnerInputType = new GraphQLInputObjectType({
+    name: 'OlympicWinnerInput',
+    fields: () => ({
+        id: { type: GraphQLID },
+        athlete: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        country: { type: GraphQLString },
+        year: { type: GraphQLInt },
+        date: { type: GraphQLString },
+        sport: { type: GraphQLString },
+        gold: { type: GraphQLInt },
+        silver: { type: GraphQLInt },
+        bronze: { type: GraphQLInt },
+        total: { type: GraphQLInt },
+    })
+});
+
 const ResponseType = new GraphQLObjectType({
     name: 'Response',
     fields: () => ({
@@ -115,21 +132,10 @@ const Mutation = new GraphQLObjectType({
         updateRow: {
             type: OlympicWinnerType,
             args: {
-                /* Only the ID is required */
-                id: { type: GraphQLNonNull(GraphQLID) },
-                athlete: { type: GraphQLString },
-                age: { type: GraphQLInt },
-                country: { type: GraphQLString },
-                year: { type: GraphQLInt },
-                date: { type: GraphQLString },
-                sport: { type: GraphQLString },
-                gold: { type: GraphQLInt },
-                silver: { type: GraphQLInt },
-                bronze: { type: GraphQLInt },
-                total: { type: GraphQLInt },
+                data: { type: GraphQLNonNull(OlympicWinnerInputType) },
             },
             resolve(parentValue, args) {
-                return axios.patch(`http://localhost:3000/olympicWinners/${args.id}`, args)
+                return axios.patch(`http://localhost:3000/olympicWinners/${args.data.id}`, args.data)
                     .then(res => res.data)
                     .catch(err => console.log(err));
             }
