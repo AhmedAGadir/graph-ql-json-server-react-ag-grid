@@ -149,17 +149,17 @@ const Mutation = new GraphQLObjectType({
                 return axios.delete(`http://localhost:3000/olympicWinners/${args.id}`)
                     .then(res => res.data)
                     .catch(err => console.log(err))
+            }
+        },
+        updateRow: {
+            type: OlympicWinnerType,
+            args: {
+                data: { type: GraphQLNonNull(OlympicWinnerInputType) },
             },
-            updateRow: {
-                type: OlympicWinnerType,
-                args: {
-                    data: { type: GraphQLNonNull(OlympicWinnerInputType) },
-                },
-                resolve(parentValue, args) {
-                    return axios.patch(`http://localhost:3000/olympicWinners/${args.data.id}`, args.data)
-                        .then(res => res.data)
-                        .catch(err => console.log(err));
-                }
+            resolve(parentValue, args) {
+                return axios.patch(`http://localhost:3000/olympicWinners/${args.data.id}`, args.data)
+                    .then(res => res.data)
+                    .catch(err => console.log(err));
             }
         }
     }

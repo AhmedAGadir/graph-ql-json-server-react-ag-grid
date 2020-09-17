@@ -44,6 +44,7 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                         getRows(startRow: $startRow, endRow: $endRow, sortModel: $sortModel) {
                             lastRow
                             rows { 
+                                id, 
                                 ${visibleColumnIds.join('\n')}
                             }
                         }

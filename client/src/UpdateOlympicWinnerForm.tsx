@@ -7,12 +7,19 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 interface UpdateOlympicWinnerFormProps {
-    data: IOlympicWinner
+    data: IOlympicWinner,
+    submit: (data: IOlympicWinner) => void,
+    onHide: () => void,
 }
 
-const UpdateOlympicWinnerForm = ({ data }: UpdateOlympicWinnerFormProps): React.ReactElement => {
-    const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
+const UpdateOlympicWinnerForm = (props: UpdateOlympicWinnerFormProps): React.ReactElement => {
+    const [show, setShow] = useState<Boolean>(true);
+
+    const handleClose = () => {
+        setShow(false);
+        props.onHide();
+    }
+
     // const handleShow = () => setShow(true);
 
     const {
@@ -27,7 +34,7 @@ const UpdateOlympicWinnerForm = ({ data }: UpdateOlympicWinnerFormProps): React.
         silver,
         bronze,
         total,
-    } = data;
+    } = props.data;
 
 
     const [athleteForm, setAthleteForm] = useState<string>(athlete)
@@ -42,6 +49,7 @@ const UpdateOlympicWinnerForm = ({ data }: UpdateOlympicWinnerFormProps): React.
     const [totalForm, setTotalForm] = useState<number>(total)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        console.log('submitting form');
         e.preventDefault();
         const updatedOlympicWinner: IOlympicWinner = {
             id,
@@ -55,14 +63,16 @@ const UpdateOlympicWinnerForm = ({ data }: UpdateOlympicWinnerFormProps): React.
             silver: silverForm,
             bronze: bronzeForm,
             total: totalForm,
-        }
+        };
+        props.submit(updatedOlympicWinner);
+        handleClose();
     }
 
     return (
         <>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Update Olympic Winner</Modal.Title>
+                    <Modal.Title>Olympic Winner</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
@@ -142,13 +152,13 @@ const UpdateOlympicWinnerForm = ({ data }: UpdateOlympicWinnerFormProps): React.
                                 <Form.Control type="number" placeholder="Athlete total..." value={totalForm} onChange={e => setTotalForm(parseInt(e.target.value))} />
                             </Col>
                         </Form.Group>
-
+                        <Button variant="primary" type="submit" style={{ display: 'block', margin: 'auto' }}>Submit</Button>
                     </Form>
 
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" type="submit">Submit</Button>
-                </Modal.Footer>
+                {/* <Modal.Footer> */}
+
+                {/* </Modal.Footer> */}
             </Modal>
         </>
     );
