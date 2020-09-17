@@ -1,1 +1,14 @@
 @import './bootstrap.min.css';
+img[alt="ag-Grid Logo"] {
+    display: block;
+    margin: auto;
+    width: 250px;
+}
+
+.card-header {
+    background: lightgrey;
+}
+
+.card-body {
+    /* text-align: center; */
+}

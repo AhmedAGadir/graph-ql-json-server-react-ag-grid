@@ -93,8 +93,8 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   return (
     <div className="container my-4">
-      <h3>ag-Grid + React + GraphQL + Apollo + JSON Server</h3>
       <div className="card my-3">
+        <div className="card-header"><img src={require("./assets/ag-grid-logo.png")} alt="ag-Grid Logo" /></div>
         <div className="card-body">
           <button onClick={updateSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>
           <button onClick={deleteSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Delete Selected Row</button>
@@ -103,7 +103,7 @@ const App: FunctionComponent = (): React.ReactElement => {
       </div>
       <div
         id="myGrid"
-        style={{ height: "calc(100vh - 250px)" }}
+        style={{ height: "calc(100vh - 300px)" }}
         className="ag-theme-alpine-dark">
         <AgGridReact
           columnDefs={GridOptions.columnDefs}
