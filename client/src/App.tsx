@@ -93,7 +93,7 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   return (
     <div className="container my-4">
-      <h3>ag-Grid Server Side Row Model + GraphQL + Apollo + JSON Server</h3>
+      <h3>ag-Grid + GraphQL + Apollo + JSON Server</h3>
       <div className="card my-3">
         <div className="card-body">
           <button onClick={updateSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>

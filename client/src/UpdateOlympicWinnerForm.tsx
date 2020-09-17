@@ -1,4 +1,4 @@
-import React, { useState, FormEventHandler } from 'react';
+import React, { useState } from 'react';
 import { IOlympicWinner } from './interfaces';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -86,73 +86,117 @@ const UpdateOlympicWinnerForm = (props: UpdateOlympicWinnerFormProps): React.Rea
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Athlete</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" placeholder="Athlete name..." value={athleteForm} onChange={e => setAthleteForm(e.target.value)} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Athlete name..."
+                                    value={athleteForm}
+                                    onChange={e => setAthleteForm(e.target.value)} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Age</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="number" placeholder="Athlete age..." value={ageForm} onChange={e => setAgeForm(parseInt(e.target.value))} />
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Athlete age..."
+                                    value={ageForm}
+                                    onChange={e => setAgeForm(parseInt(e.target.value))} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Country</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" placeholder="Athlete country..." value={countryForm} onChange={e => setCountryForm(e.target.value)} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Athlete country..."
+                                    value={countryForm}
+                                    onChange={e => setCountryForm(e.target.value)} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Year</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="number" placeholder="Athlete year..." value={yearForm} onChange={e => setYearForm(parseInt(e.target.value))} />
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Athlete year..."
+                                    value={yearForm}
+                                    onChange={e => setYearForm(parseInt(e.target.value))} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Date</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" placeholder="Athlete date..." value={dateForm} onChange={e => setDateForm(e.target.value)} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Athlete date..."
+                                    value={dateForm}
+                                    onChange={e => setDateForm(e.target.value)} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Sport</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" placeholder="Athlete sport..." value={sportForm} onChange={e => setSportForm(e.target.value)} />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Athlete sport..."
+                                    value={sportForm}
+                                    onChange={e => setSportForm(e.target.value)} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Gold</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="number" placeholder="Athlete gold..." value={goldForm} onChange={e => setGoldForm(parseInt(e.target.value))} />
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Athlete gold..."
+                                    value={goldForm}
+                                    onChange={e => setGoldForm(parseInt(e.target.value))} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Silver</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="number" placeholder="Athlete silver..." value={silverForm} onChange={e => setSilverForm(parseInt(e.target.value))} />
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Athlete silver..."
+                                    value={silverForm}
+                                    onChange={e => setSilverForm(parseInt(e.target.value))} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Bronze</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="number" placeholder="Athlete bronze..." value={bronzeForm} onChange={e => setBronzeForm(parseInt(e.target.value))} />
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Athlete bronze..."
+                                    value={bronzeForm}
+                                    onChange={e => setBronzeForm(parseInt(e.target.value))} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Total</Form.Label>
                             <Col sm="10">
-                                <Form.Control type="number" placeholder="Athlete total..." value={totalForm} onChange={e => setTotalForm(parseInt(e.target.value))} />
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Athlete total..."
+                                    value={totalForm}
+                                    onChange={e => setTotalForm(parseInt(e.target.value))} />
                             </Col>
                         </Form.Group>
-                        <Button variant="primary" type="submit" style={{ display: 'block', margin: 'auto' }}>Submit</Button>
+                        <Button
+                            style={{ display: 'block', margin: 'auto' }}
+                            variant="primary"
+                            type="submit"
+                        >Submit</Button>
                     </Form>
 
                 </Modal.Body>
