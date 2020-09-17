@@ -123,23 +123,23 @@ const RootQuery = new GraphQLObjectType({
                     .catch(err => console.log(err));
             }
         },
+        fetchRow: {
+            type: OlympicWinnerType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parentValue, args) {
+                return axios.get(JSON_SERVER_ENDPOINT + '/' + args.id)
+                    .then(res => res.data)
+                    .catch(err => console.log(err));
+            }
+        }
     }
 });
 
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        updateRow: {
-            type: OlympicWinnerType,
-            args: {
-                data: { type: GraphQLNonNull(OlympicWinnerInputType) },
-            },
-            resolve(parentValue, args) {
-                return axios.patch(`http://localhost:3000/olympicWinners/${args.data.id}`, args.data)
-                    .then(res => res.data)
-                    .catch(err => console.log(err));
-            }
-        },
         deleteRow: {
             type: OlympicWinnerType,
             args: {
@@ -149,6 +149,17 @@ const Mutation = new GraphQLObjectType({
                 return axios.delete(`http://localhost:3000/olympicWinners/${args.id}`)
                     .then(res => res.data)
                     .catch(err => console.log(err))
+            },
+            updateRow: {
+                type: OlympicWinnerType,
+                args: {
+                    data: { type: GraphQLNonNull(OlympicWinnerInputType) },
+                },
+                resolve(parentValue, args) {
+                    return axios.patch(`http://localhost:3000/olympicWinners/${args.data.id}`, args.data)
+                        .then(res => res.data)
+                        .catch(err => console.log(err));
+                }
             }
         }
     }

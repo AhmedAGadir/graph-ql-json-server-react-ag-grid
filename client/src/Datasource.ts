@@ -80,7 +80,8 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                             gold
                             silver
                             bronze
-                            total}
+                            total
+                        }
                     }
                     `,
                 variables: {
@@ -89,6 +90,34 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
             })
                 .then(res => {
                     return res.data.deleteRow;
+                })
+                .catch(err => console.log('err', err));
+        },
+        fetchRow(id: string): Promise<any> {
+            return client.mutate({
+                mutation: gql`
+                    query FetchRow($id: ID!) {
+                        fetchRow(id: $id) {
+                            id
+                            athlete
+                            age
+                            country
+                            year
+                            date
+                            sport
+                            gold
+                            silver
+                            bronze
+                            total
+                        }
+                    }
+                    `,
+                variables: {
+                    id
+                }
+            })
+                .then(res => {
+                    return res.data.fetchRow;
                 })
                 .catch(err => console.log('err', err));
         },

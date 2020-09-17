@@ -1,3 +1,7 @@
+
+
+// create a form for updating a row
+
 import React, { FunctionComponent, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import {
@@ -8,12 +12,12 @@ import {
   SideBarDef,
   ColumnVisibleEvent,
   SortChangedEvent,
-  CellEditingStoppedEvent,
   RowNode
 } from "ag-grid-community";
 
 import { IOlympicWinner, IServerSideDatasourceWithCRUD } from "./interfaces";
 import { createServerSideDatasource } from './Datasource';
+import UpdateOlympicWinnerForm from "./UpdateOlympicWinnerForm";
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
@@ -27,6 +31,9 @@ import './App.css';
 const App: FunctionComponent = (): React.ReactElement => {
   const [gridApi, setGridApi] = useState<GridApi>(null);
   const [columnApi, setColumnApi] = useState<ColumnApi>(null);
+
+  const [showForm, setShowForm] = useState<Boolean>(false);
+  const [formData, setFormData] = useState<IOlympicWinner>(null);
 
   const datasource: IServerSideDatasourceWithCRUD = createServerSideDatasource();
 
@@ -46,7 +53,6 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const defaultColDef: ColDef = {
     sortable: true,
-    // editable: true,
     resizable: true
   }
 
@@ -92,7 +98,7 @@ const App: FunctionComponent = (): React.ReactElement => {
     params.api.purgeServerSideCache();
   }
 
-  const deleteSelectedRow = () => {
+  const deleteSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
     if (selectedNodes.length === 0) {
       alert('Select a row first');
@@ -110,44 +116,50 @@ const App: FunctionComponent = (): React.ReactElement => {
       });
   }
 
-  const updateSelectedRow = () => {
+  const updateSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
     if (selectedNodes.length === 0) {
       alert('Select a row first');
       return;
     }
-    const selectedRow: RowNode = selectedNodes[0].data;
-
-    const updatedRow: IOlympicWinner = {
-      id: selectedRow.id,
-      athlete: 'Ahmed Gadir',
-      age: 26,
-      country: 'United Kingdom',
-      year: 2020,
-      date: '11/09/2020',
-      sport: 'Brazilian Jiu Jitsu',
-      gold: 10,
-      silver: 0,
-      bronze: 0,
-      total: 10
-    }
+    const selectedRowId: string = selectedNodes[0].id;
 
     datasource
-      .updateRow(updatedRow)
-      .then(() => {
+      .fetchRow(selectedRowId)
+      .then((selectedRow: IOlympicWinner) => {
+        setFormData(selectedRow);
+        setShowForm(true);
+      })
+      .catch((err: Error) => {
+        console.log('Error', err);
+      })
+  };
+
+  const updateRow = (data: IOlympicWinner) => {
+    datasource
+      .updateRow(data)
+      .then((res) => {
+        console.log('res', res)
         gridApi.purgeServerSideCache();
       })
       .catch((err: Error) => console.log('error', err));
-  };
+  }
 
+  const purgeServerSideCacheHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
+    gridApi.purgeServerSideCache();
+  }
+
+  if (showForm) {
+    return <UpdateOlympicWinnerForm data={formData} />
+  }
   return (
     <div className="container my-4">
       <h3>ag-Grid Server Side Row Model + GraphQL + Apollo + JSON Server</h3>
       <div className="card my-3">
         <div className="card-body">
-          <button onClick={updateSelectedRow} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>
-          <button onClick={deleteSelectedRow} type="button" className="btn btn-secondary mx-2">Delete Selected Row</button>
-          <button onClick={() => { gridApi.purgeServerSideCache() }} type="button" className="btn btn-secondary mx-2">Purge SS Cache</button>
+          <button onClick={updateSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>
+          <button onClick={deleteSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Delete Selected Row</button>
+          <button onClick={purgeServerSideCacheHandler} type="button" className="btn btn-secondary mx-2">Purge SS Cache</button>
         </div>
       </div>
       <div
@@ -161,8 +173,6 @@ const App: FunctionComponent = (): React.ReactElement => {
           onGridReady={onGridReady}
           onColumnVisible={onColumnVisible}
           onSortChanged={onSortChanged}
-          // onCellEditingStopped={onCellEditingStopped}
-          // editType="fullRow"
           sideBar={sideBar}
           rowSelection="single"
           getRowNodeId={getRowNodeId}
