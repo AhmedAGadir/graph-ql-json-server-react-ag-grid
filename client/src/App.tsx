@@ -117,7 +117,7 @@ const App: FunctionComponent = (): React.ReactElement => {
           onGridReady={onGridReady}
         />
       </div>
-      {showForm ? <OlympicWinnerForm data={formData} submit={updateRow} onHide={closeForm} /> : null}
+      {showForm ? <OlympicWinnerForm data={formData} submit={updateRow} hide={closeForm} /> : null}
     </div>
   )
 }

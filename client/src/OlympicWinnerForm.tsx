@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col';
 interface OlympicWinnerFormProps {
     data: IOlympicWinner,
     submit: (data: IOlympicWinner) => void,
-    onHide: () => void,
+    hide: () => void,
 }
 
 const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement => {
@@ -17,7 +17,7 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
 
     const handleClose = () => {
         setShow(false);
-        props.onHide();
+        props.hide();
     }
 
     // const handleShow = () => setShow(true);
