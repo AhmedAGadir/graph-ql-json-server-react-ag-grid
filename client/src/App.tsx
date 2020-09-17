@@ -4,7 +4,7 @@ import {
   GridApi,
   ColumnApi,
   GridReadyEvent,
-  RowNode
+  RowNode,
 } from "ag-grid-community";
 import { IOlympicWinner, IServerSideDatasourceWithCRUD } from "./interfaces";
 import { createServerSideDatasource } from './Datasource';
@@ -20,6 +20,8 @@ import './App.css';
 
 const App: FunctionComponent = (): React.ReactElement => {
   const [gridApi, setGridApi] = useState<GridApi>(null);
+  const [columnApi, setColumnApi] = useState<ColumnApi>(null);
+
   const [showForm, setShowForm] = useState<Boolean>(false);
   const [formData, setFormData] = useState<IOlympicWinner>(null);
 
@@ -27,26 +29,16 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const onGridReady = (params: GridReadyEvent) => {
     setGridApi(params.api);
+    setColumnApi(params.columnApi);
+
     params.api.setServerSideDatasource(datasource);
     params.api.sizeColumnsToFit();
   }
 
-  const getSelectedNode = (): RowNode => {
-    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
-    if (selectedNodes.length === 0) {
-      alert('Select a row first');
-      return null;
-    }
-    const selectedNode: RowNode = gridApi.getSelectedNodes()[0];
-    return selectedNode;
-  }
-
   const deleteSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     const selectedNode = getSelectedNode();
-
     if (selectedNode) {
       const selectedRowId: string = selectedNode.id;
-
       datasource
         .deleteRow(selectedRowId)
         .then(() => {
@@ -57,10 +49,8 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const updateSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     const selectedNode = getSelectedNode();
-
     if (selectedNode) {
       const selectedRowId: string = selectedNode.id;
-
       datasource
         .fetchRow(selectedRowId)
         .then((selectedRow: IOlympicWinner) => {
@@ -89,6 +79,16 @@ const App: FunctionComponent = (): React.ReactElement => {
   const closeForm = () => {
     setShowForm(false);
     setFormData(null);
+  }
+
+  const getSelectedNode = (): RowNode => {
+    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
+    if (selectedNodes.length === 0) {
+      alert('Select a row first');
+      return null;
+    }
+    const selectedNode: RowNode = gridApi.getSelectedNodes()[0];
+    return selectedNode;
   }
 
   return (
