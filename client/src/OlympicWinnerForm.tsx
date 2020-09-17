@@ -6,13 +6,13 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-interface UpdateOlympicWinnerFormProps {
+interface OlympicWinnerFormProps {
     data: IOlympicWinner,
     submit: (data: IOlympicWinner) => void,
     onHide: () => void,
 }
 
-const UpdateOlympicWinnerForm = (props: UpdateOlympicWinnerFormProps): React.ReactElement => {
+const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement => {
     const [show, setShow] = useState<Boolean>(true);
 
     const handleClose = () => {
@@ -208,4 +208,4 @@ const UpdateOlympicWinnerForm = (props: UpdateOlympicWinnerFormProps): React.Rea
     );
 }
 
-export default UpdateOlympicWinnerForm;
+export default OlympicWinnerForm;

@@ -9,7 +9,7 @@ import {
 import { IOlympicWinner, IServerSideDatasourceWithCRUD } from "./interfaces";
 import { createServerSideDatasource } from './Datasource';
 import GridOptions from './GridOptions';
-import UpdateOlympicWinnerForm from "./UpdateOlympicWinnerForm";
+import OlympicWinnerForm from "./OlympicWinnerForm";
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
@@ -93,7 +93,7 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   return (
     <div className="container my-4">
-      <h3>ag-Grid + GraphQL + Apollo + JSON Server</h3>
+      <h3>ag-Grid + React + GraphQL + Apollo + JSON Server</h3>
       <div className="card my-3">
         <div className="card-body">
           <button onClick={updateSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>
@@ -117,7 +117,7 @@ const App: FunctionComponent = (): React.ReactElement => {
           onGridReady={onGridReady}
         />
       </div>
-      {showForm ? <UpdateOlympicWinnerForm data={formData} submit={updateRow} onHide={closeForm} /> : null}
+      {showForm ? <OlympicWinnerForm data={formData} submit={updateRow} onHide={closeForm} /> : null}
     </div>
   )
 }
