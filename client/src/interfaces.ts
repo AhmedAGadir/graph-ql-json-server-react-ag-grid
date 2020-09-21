@@ -15,7 +15,12 @@ export interface IOlympicWinner {
 }
 
 export interface IServerSideDatasourceWithCRUD extends IServerSideDatasource {
-    deleteRow(id: string): Promise<any>,
-    fetchRow(idL: string): Promise<any>,
+    createRow(data: IOlympicWinner): Promise<any>,
+    readRow(id: string): Promise<any>,
     updateRow(data: IOlympicWinner): Promise<any>
+    deleteRow(id: string): Promise<any>,
+}
+
+export interface IFormSubmitHandler {
+    (data: IOlympicWinner): void;
 }

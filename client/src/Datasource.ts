@@ -66,39 +66,39 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                     params.failCallback();
                 });
         },
-        deleteRow(id: string): Promise<any> {
+        createRow(data: IOlympicWinner): Promise<any> {
             return client.mutate({
                 mutation: gql`
-                    mutation DeleteRow($id: ID!) {
-                        deleteRow(id: $id) {                             
-                            id
-                            athlete
-                            age
-                            country
-                            year
-                            date
-                            sport
-                            gold
-                            silver
-                            bronze
-                            total
+                    mutation UpdateRow($data: OlympicWinnerInput!) {
+                        updateRow(data: $data) {  
+                                id
+                                athlete
+                                age
+                                country
+                                year
+                                date
+                                sport
+                                gold
+                                silver
+                                bronze
+                                total
                         }
                     }
                     `,
                 variables: {
-                    id
+                    data
                 }
             })
                 .then(res => {
-                    return res.data.deleteRow;
+                    return res.data.updateRow;
                 })
                 .catch(err => console.log('err', err));
         },
-        fetchRow(id: string): Promise<any> {
-            return client.mutate({
-                mutation: gql`
-                    query FetchRow($id: ID!) {
-                        fetchRow(id: $id) {
+        readRow(id: string): Promise<any> {
+            return client.query({
+                query: gql`
+                    query ReadRow($id: ID!) {
+                        readRow(id: $id) {
                             id
                             athlete
                             age
@@ -118,7 +118,7 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                 }
             })
                 .then(res => {
-                    return res.data.fetchRow;
+                    return res.data.readRow;
                 })
                 .catch(err => console.log('err', err));
         },
@@ -147,6 +147,34 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
             })
                 .then(res => {
                     return res.data.updateRow;
+                })
+                .catch(err => console.log('err', err));
+        },
+        deleteRow(id: string): Promise<any> {
+            return client.mutate({
+                mutation: gql`
+                    mutation DeleteRow($id: ID!) {
+                        deleteRow(id: $id) {                             
+                            id
+                            athlete
+                            age
+                            country
+                            year
+                            date
+                            sport
+                            gold
+                            silver
+                            bronze
+                            total
+                        }
+                    }
+                    `,
+                variables: {
+                    id
+                }
+            })
+                .then(res => {
+                    return res.data.deleteRow;
                 })
                 .catch(err => console.log('err', err));
         }

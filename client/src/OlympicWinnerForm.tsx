@@ -5,10 +5,11 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { uuid } from 'uuidv4';
 
 interface OlympicWinnerFormProps {
     data: IOlympicWinner,
-    submit: (data: IOlympicWinner) => void,
+    submit: (data: IOlympicWinner | null) => void,
     hide: () => void,
 }
 
@@ -22,19 +23,47 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
 
     // const handleShow = () => setShow(true);
 
-    const {
-        id,
-        athlete,
-        age,
-        country,
-        year,
-        date,
-        sport,
-        gold,
-        silver,
-        bronze,
-        total,
-    } = props.data;
+    console.log(props);
+
+    let id: string
+    let athlete: string;
+    let age: number;
+    let country: string;
+    let year: number;
+    let date: string;
+    let sport: string;
+    let gold: number;
+    let silver: number;
+    let bronze: number;
+    let total: number;
+
+    if (props.data) {
+        ({
+            id,
+            athlete,
+            age,
+            country,
+            year,
+            date,
+            sport,
+            gold,
+            silver,
+            bronze,
+            total,
+        } = props.data);
+    } else {
+        id = uuid();
+        athlete = null;
+        age = null;
+        country = null;
+        year = null;
+        date = null;
+        sport = null;
+        gold = null;
+        silver = null;
+        bronze = null;
+        total = null;
+    }
 
 
     const [athleteForm, setAthleteForm] = useState<string>(athlete)
@@ -88,7 +117,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="text"
-                                    placeholder="Athlete name..."
+                                    placeholder="Enter name..."
+                                    required
                                     value={athleteForm}
                                     onChange={e => setAthleteForm(e.target.value)} />
                             </Col>
@@ -99,7 +129,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="number"
-                                    placeholder="Athlete age..."
+                                    placeholder="Enter age..."
+                                    required
                                     value={ageForm}
                                     onChange={e => setAgeForm(parseInt(e.target.value))} />
                             </Col>
@@ -110,7 +141,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="text"
-                                    placeholder="Athlete country..."
+                                    placeholder="Enter country..."
+                                    required
                                     value={countryForm}
                                     onChange={e => setCountryForm(e.target.value)} />
                             </Col>
@@ -121,7 +153,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="number"
-                                    placeholder="Athlete year..."
+                                    placeholder="Enter year..."
+                                    required
                                     value={yearForm}
                                     onChange={e => setYearForm(parseInt(e.target.value))} />
                             </Col>
@@ -132,7 +165,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="text"
-                                    placeholder="Athlete date..."
+                                    placeholder="Enter date..."
+                                    required
                                     value={dateForm}
                                     onChange={e => setDateForm(e.target.value)} />
                             </Col>
@@ -143,7 +177,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="text"
-                                    placeholder="Athlete sport..."
+                                    placeholder="Enter sport..."
+                                    required
                                     value={sportForm}
                                     onChange={e => setSportForm(e.target.value)} />
                             </Col>
@@ -154,7 +189,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="number"
-                                    placeholder="Athlete gold..."
+                                    placeholder="Enter gold..."
+                                    required
                                     value={goldForm}
                                     onChange={e => setGoldForm(parseInt(e.target.value))} />
                             </Col>
@@ -165,7 +201,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="number"
-                                    placeholder="Athlete silver..."
+                                    placeholder="Enter silver..."
+                                    required
                                     value={silverForm}
                                     onChange={e => setSilverForm(parseInt(e.target.value))} />
                             </Col>
@@ -176,7 +213,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="number"
-                                    placeholder="Athlete bronze..."
+                                    placeholder="Enter bronze..."
+                                    required
                                     value={bronzeForm}
                                     onChange={e => setBronzeForm(parseInt(e.target.value))} />
                             </Col>
@@ -187,7 +225,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
                             <Col sm="10">
                                 <Form.Control
                                     type="number"
-                                    placeholder="Athlete total..."
+                                    placeholder="Enter total..."
+                                    required
                                     value={totalForm}
                                     onChange={e => setTotalForm(parseInt(e.target.value))} />
                             </Col>

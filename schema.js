@@ -123,7 +123,7 @@ const RootQuery = new GraphQLObjectType({
                     .catch(err => console.log(err));
             }
         },
-        fetchRow: {
+        readRow: {
             type: OlympicWinnerType,
             args: {
                 id: { type: GraphQLNonNull(GraphQLID) },

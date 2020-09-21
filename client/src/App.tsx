@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import {
   GridApi,
@@ -6,7 +6,7 @@ import {
   GridReadyEvent,
   RowNode,
 } from "ag-grid-community";
-import { IOlympicWinner, IServerSideDatasourceWithCRUD } from "./interfaces";
+import { IOlympicWinner, IServerSideDatasourceWithCRUD, IFormSubmitHandler } from "./interfaces";
 import { createServerSideDatasource } from './Datasource';
 import GridOptions from './GridOptions';
 import OlympicWinnerForm from "./OlympicWinnerForm";
@@ -24,6 +24,11 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const [showForm, setShowForm] = useState<Boolean>(false);
   const [formData, setFormData] = useState<IOlympicWinner>(null);
+  const [formSubmitHandler, setFormSubmitHandler] = useState<IFormSubmitHandler>(null);
+
+  useEffect(() => {
+    debugger;
+  }, [formSubmitHandler])
 
   const datasource: IServerSideDatasourceWithCRUD = createServerSideDatasource();
 
@@ -34,6 +39,23 @@ const App: FunctionComponent = (): React.ReactElement => {
     params.api.setServerSideDatasource(datasource);
     params.api.sizeColumnsToFit();
   }
+
+  const addRowHandler: React.MouseEventHandler<HTMLButtonElement> = (): void => {
+    openForm(null, addRow);
+  }
+
+  const updateSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
+    const selectedNode = getSelectedNode();
+    if (selectedNode) {
+      const selectedRowId: string = selectedNode.id;
+      // we must first query all of the rows data before passing it to the form
+      datasource
+        .readRow(selectedRowId)
+        .then((selectedRow: IOlympicWinner) => {
+          openForm(selectedRow, updateRow);
+        });
+    }
+  };
 
   const deleteSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     const selectedNode = getSelectedNode();
@@ -47,19 +69,15 @@ const App: FunctionComponent = (): React.ReactElement => {
     }
   }
 
-  const updateSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-    const selectedNode = getSelectedNode();
-    if (selectedNode) {
-      const selectedRowId: string = selectedNode.id;
-      datasource
-        .fetchRow(selectedRowId)
-        .then((selectedRow: IOlympicWinner) => {
-          openForm(selectedRow);
-        });
-    }
-  };
+  const addRow: IFormSubmitHandler = (data: IOlympicWinner) => {
+    datasource
+      .createRow(data)
+      .then(() => {
+        gridApi.purgeServerSideCache();
+      })
+  }
 
-  const updateRow = (data: IOlympicWinner) => {
+  const updateRow: IFormSubmitHandler = (data: IOlympicWinner) => {
     datasource
       .updateRow(data)
       .then(() => {
@@ -67,17 +85,15 @@ const App: FunctionComponent = (): React.ReactElement => {
       })
   }
 
-  const purgeServerSideCacheHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-    gridApi.purgeServerSideCache();
-  }
-
-  const openForm = (data: IOlympicWinner) => {
+  const openForm = (data: IOlympicWinner, formSubmitHandler: IFormSubmitHandler) => {
     setFormData(data);
+    setFormSubmitHandler(formSubmitHandler);
     setShowForm(true);
   }
 
   const closeForm = () => {
     setShowForm(false);
+    setFormSubmitHandler(null);
     setFormData(null);
   }
 
@@ -91,11 +107,19 @@ const App: FunctionComponent = (): React.ReactElement => {
     return selectedNode;
   }
 
+  const purgeServerSideCacheHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
+    gridApi.purgeServerSideCache();
+  }
+
+
   return (
     <div className="container my-4">
       <div className="card my-3">
-        <div className="card-header"><img src={require("./assets/ag-grid-logo.png")} alt="ag-Grid Logo" /></div>
+        <div className="card-header">
+          <img src={require("./assets/ag-grid-logo.png")} alt="ag-Grid Logo" />
+        </div>
         <div className="card-body">
+          <button onClick={addRowHandler} type="button" className="btn btn-secondary mx-2">Add Row</button>
           <button onClick={updateSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>
           <button onClick={deleteSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Delete Selected Row</button>
           <button onClick={purgeServerSideCacheHandler} type="button" className="btn btn-secondary mx-2">Purge SS Cache</button>
@@ -117,7 +141,7 @@ const App: FunctionComponent = (): React.ReactElement => {
           onGridReady={onGridReady}
         />
       </div>
-      {showForm ? <OlympicWinnerForm data={formData} submit={updateRow} hide={closeForm} /> : null}
+      {showForm ? <OlympicWinnerForm data={formData} submit={formSubmitHandler} hide={closeForm} /> : null}
     </div>
   )
 }
