@@ -146,7 +146,7 @@ const Mutation = new GraphQLObjectType({
                 data: { type: GraphQLNonNull(OlympicWinnerInputType) },
             },
             resolve(parentValue, args) {
-                return axios.post(`http://localhost:3000/olympicWinners`, args.data)
+                return axios.post(JSON_SERVER_ENDPOINT, args.data)
                     .then(res => res.data)
                     .catch(err => console.log(err));
             }
@@ -157,7 +157,7 @@ const Mutation = new GraphQLObjectType({
                 data: { type: GraphQLNonNull(OlympicWinnerInputType) },
             },
             resolve(parentValue, args) {
-                return axios.patch(`http://localhost:3000/olympicWinners/${args.data.id}`, args.data)
+                return axios.patch(`${JSON_SERVER_ENDPOINT}/${args.data.id}`, args.data)
                     .then(res => res.data)
                     .catch(err => console.log(err));
             }
@@ -168,7 +168,7 @@ const Mutation = new GraphQLObjectType({
                 id: { type: GraphQLNonNull(GraphQLID) }
             },
             resolve(parentValue, args) {
-                return axios.delete(`http://localhost:3000/olympicWinners/${args.id}`)
+                return axios.delete(`${JSON_SERVER_ENDPOINT}/${args.id}`)
                     .then(res => res.data)
                     .catch(err => console.log(err))
             }

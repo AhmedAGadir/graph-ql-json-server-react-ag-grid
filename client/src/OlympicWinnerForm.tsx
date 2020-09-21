@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from "uuid";
 
 interface OlympicWinnerFormProps {
     data: IOlympicWinner,
