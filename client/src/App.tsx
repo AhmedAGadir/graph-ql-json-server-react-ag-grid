@@ -70,7 +70,7 @@ const App: FunctionComponent = (): React.ReactElement => {
     const selectedNode = getSelectedNode();
     if (selectedNode) {
       const selectedRowId: string = selectedNode.id;
-      // we must first query all of the rows data before passing it to the form
+      // first query all of the rows data before passing it to the form
       datasource
         .readRow(selectedRowId)
         .then((selectedRow: IOlympicWinner) => {
@@ -93,13 +93,8 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const openForm = (data: IOlympicWinner, fn: IFormSubmitHandler) => {
     setFormData(data);
-    setFormSubmitHandler(fn);
-
-    setTimeout(() => {
-      console.log('openForm', data, fn);
-      debugger;
-    }, 2000)
-    // setShowForm(true);
+    setFormSubmitHandler(() => fn);
+    setShowForm(true);
   }
 
   const closeForm = () => {

@@ -69,8 +69,8 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
         createRow(data: IOlympicWinner): Promise<any> {
             return client.mutate({
                 mutation: gql`
-                    mutation UpdateRow($data: OlympicWinnerInput!) {
-                        updateRow(data: $data) {  
+                    mutation CreateRow($data: OlympicWinnerInput!) {
+                        createRow(data: $data) {  
                                 id
                                 athlete
                                 age
@@ -90,7 +90,7 @@ export const createServerSideDatasource = function (): IServerSideDatasourceWith
                 }
             })
                 .then(res => {
-                    return res.data.updateRow;
+                    return res.data.createRow;
                 })
                 .catch(err => console.log('err', err));
         },

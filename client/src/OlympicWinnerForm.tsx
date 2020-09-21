@@ -23,19 +23,17 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
 
     // const handleShow = () => setShow(true);
 
-    console.log(props);
-
-    let id: string
-    let athlete: string;
-    let age: number;
-    let country: string;
-    let year: number;
-    let date: string;
-    let sport: string;
-    let gold: number;
-    let silver: number;
-    let bronze: number;
-    let total: number;
+    let id: any;
+    let athlete: any;
+    let age: any;
+    let country: any;
+    let year: any;
+    let date: any;
+    let sport: any;
+    let gold: any;
+    let silver: any;
+    let bronze: any;
+    let total: any;
 
     if (props.data) {
         ({
@@ -53,16 +51,16 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
         } = props.data);
     } else {
         id = uuid();
-        athlete = null;
-        age = null;
-        country = null;
-        year = null;
-        date = null;
-        sport = null;
-        gold = null;
-        silver = null;
-        bronze = null;
-        total = null;
+        athlete = '';
+        age = '';
+        country = '';
+        year = '';
+        date = '';
+        sport = '';
+        gold = '';
+        silver = '';
+        bronze = '';
+        total = '';
     }
 
 
@@ -78,9 +76,8 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
     const [totalForm, setTotalForm] = useState<number>(total)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        console.log('submitting form');
         e.preventDefault();
-        const updatedOlympicWinner: IOlympicWinner = {
+        const data: IOlympicWinner = {
             id,
             athlete: athleteForm,
             age: ageForm,
@@ -93,7 +90,7 @@ const OlympicWinnerForm = (props: OlympicWinnerFormProps): React.ReactElement =>
             bronze: bronzeForm,
             total: totalForm,
         };
-        props.submit(updatedOlympicWinner);
+        props.submit(data);
         handleClose();
     }
 

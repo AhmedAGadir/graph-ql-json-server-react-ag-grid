@@ -140,15 +140,15 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        deleteRow: {
+        createRow: {
             type: OlympicWinnerType,
             args: {
-                id: { type: GraphQLNonNull(GraphQLID) }
+                data: { type: GraphQLNonNull(OlympicWinnerInputType) },
             },
             resolve(parentValue, args) {
-                return axios.delete(`http://localhost:3000/olympicWinners/${args.id}`)
+                return axios.post(`http://localhost:3000/olympicWinners`, args.data)
                     .then(res => res.data)
-                    .catch(err => console.log(err))
+                    .catch(err => console.log(err));
             }
         },
         updateRow: {
@@ -160,6 +160,17 @@ const Mutation = new GraphQLObjectType({
                 return axios.patch(`http://localhost:3000/olympicWinners/${args.data.id}`, args.data)
                     .then(res => res.data)
                     .catch(err => console.log(err));
+            }
+        },
+        deleteRow: {
+            type: OlympicWinnerType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parentValue, args) {
+                return axios.delete(`http://localhost:3000/olympicWinners/${args.id}`)
+                    .then(res => res.data)
+                    .catch(err => console.log(err))
             }
         }
     }
