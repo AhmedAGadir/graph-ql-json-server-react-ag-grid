@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IOlympicWinner } from './interfaces';
+import { IOlympicWinner, IFormSubmitHandler } from './interfaces';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -9,7 +9,7 @@ import { uuid } from 'uuidv4';
 
 interface OlympicWinnerFormProps {
     data: IOlympicWinner,
-    submit: (data: IOlympicWinner | null) => void,
+    submit: IFormSubmitHandler,
     hide: () => void,
 }
 

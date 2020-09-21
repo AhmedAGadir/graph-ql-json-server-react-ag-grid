@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import {
   GridApi,
@@ -26,10 +26,6 @@ const App: FunctionComponent = (): React.ReactElement => {
   const [formData, setFormData] = useState<IOlympicWinner>(null);
   const [formSubmitHandler, setFormSubmitHandler] = useState<IFormSubmitHandler>(null);
 
-  useEffect(() => {
-    debugger;
-  }, [formSubmitHandler])
-
   const datasource: IServerSideDatasourceWithCRUD = createServerSideDatasource();
 
   const onGridReady = (params: GridReadyEvent) => {
@@ -38,6 +34,32 @@ const App: FunctionComponent = (): React.ReactElement => {
 
     params.api.setServerSideDatasource(datasource);
     params.api.sizeColumnsToFit();
+  };
+
+  const getSelectedNode = (): RowNode => {
+    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
+    if (selectedNodes.length === 0) {
+      alert('Select a row first');
+      return null;
+    }
+    const selectedNode: RowNode = gridApi.getSelectedNodes()[0];
+    return selectedNode;
+  }
+
+  const addRow: IFormSubmitHandler = (data: IOlympicWinner) => {
+    datasource
+      .createRow(data)
+      .then(() => {
+        gridApi.purgeServerSideCache();
+      })
+  }
+
+  const updateRow: IFormSubmitHandler = (data: IOlympicWinner) => {
+    datasource
+      .updateRow(data)
+      .then(() => {
+        gridApi.purgeServerSideCache();
+      })
   }
 
   const addRowHandler: React.MouseEventHandler<HTMLButtonElement> = (): void => {
@@ -69,42 +91,21 @@ const App: FunctionComponent = (): React.ReactElement => {
     }
   }
 
-  const addRow: IFormSubmitHandler = (data: IOlympicWinner) => {
-    datasource
-      .createRow(data)
-      .then(() => {
-        gridApi.purgeServerSideCache();
-      })
-  }
-
-  const updateRow: IFormSubmitHandler = (data: IOlympicWinner) => {
-    datasource
-      .updateRow(data)
-      .then(() => {
-        gridApi.purgeServerSideCache();
-      })
-  }
-
-  const openForm = (data: IOlympicWinner, formSubmitHandler: IFormSubmitHandler) => {
+  const openForm = (data: IOlympicWinner, fn: IFormSubmitHandler) => {
     setFormData(data);
-    setFormSubmitHandler(formSubmitHandler);
-    setShowForm(true);
+    setFormSubmitHandler(fn);
+
+    setTimeout(() => {
+      console.log('openForm', data, fn);
+      debugger;
+    }, 2000)
+    // setShowForm(true);
   }
 
   const closeForm = () => {
     setShowForm(false);
     setFormSubmitHandler(null);
     setFormData(null);
-  }
-
-  const getSelectedNode = (): RowNode => {
-    const selectedNodes: RowNode[] = gridApi.getSelectedNodes();
-    if (selectedNodes.length === 0) {
-      alert('Select a row first');
-      return null;
-    }
-    const selectedNode: RowNode = gridApi.getSelectedNodes()[0];
-    return selectedNode;
   }
 
   const purgeServerSideCacheHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
