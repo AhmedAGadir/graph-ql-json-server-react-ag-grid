@@ -54,6 +54,10 @@ const App: FunctionComponent = (): React.ReactElement => {
       })
   }
 
+  const addRowHandler: React.MouseEventHandler<HTMLButtonElement> = (): void => {
+    openForm(null, addRow);
+  }
+
   const updateRow: IFormSubmitHandler = (data: IOlympicWinner) => {
     datasource
       .updateRow(data)
@@ -62,9 +66,6 @@ const App: FunctionComponent = (): React.ReactElement => {
       })
   }
 
-  const addRowHandler: React.MouseEventHandler<HTMLButtonElement> = (): void => {
-    openForm(null, addRow);
-  }
 
   const updateSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     const selectedNode = getSelectedNode();
@@ -81,7 +82,7 @@ const App: FunctionComponent = (): React.ReactElement => {
 
   const deleteSelectedRowHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     const selectedNode = getSelectedNode();
-    if (selectedNode) {
+    if (selectedNode && window.confirm('Are you sure you want to delete this node?')) {
       const selectedRowId: string = selectedNode.id;
       datasource
         .deleteRow(selectedRowId)

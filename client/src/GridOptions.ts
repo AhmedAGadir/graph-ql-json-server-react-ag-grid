@@ -7,8 +7,8 @@ import {
 import { IOlympicWinner } from './interfaces';
 
 const columnDefs: ColDef[] = [
-    { field: "athlete", maxWidth: 170 },
-    { field: "age", hide: true, maxWidth: 80 },
+    { field: "athlete" },
+    { field: "age", hide: true },
     { field: "country" },
     { field: "year" },
     { field: "date", hide: true },
@@ -51,7 +51,7 @@ const getRowNodeId = (data: IOlympicWinner) => data.id;
 
 
 const onColumnVisible = (params: ColumnVisibleEvent) => {
-    params.columnApi.autoSizeAllColumns();
+    params.api.sizeColumnsToFit();
     params.api.purgeServerSideCache();
 }
 
