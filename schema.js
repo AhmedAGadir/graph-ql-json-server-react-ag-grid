@@ -18,24 +18,6 @@ function isRequestSorting(sortModel) {
     return sortModel && sortModel.length > 0;
 }
 
-function getSortingEndPoint(args) {
-    let endPoint = JSON_SERVER_ENDPOINT;
-
-    const fields = [];
-    const orders = [];
-    args.sortModel.forEach(sM => {
-        fields.push(sM.colId);
-        orders.push(sM.sort)
-    });
-
-    // sorting
-    endPoint += `?_sort=${fields.join(',')}&_order=${orders.join(',')}`;
-    // starting from start row with a limit of endRow - startRows rows
-    endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
-
-    return endPoint;
-}
-
 const OlympicWinnerType = new GraphQLObjectType({
     name: 'OlympicWinner',
     fields: () => ({
@@ -108,7 +90,19 @@ const RootQuery = new GraphQLObjectType({
                 let endPoint;
 
                 if (isRequestSorting(args.sortModel)) {
-                    endPoint = getSortingEndPoint(args);
+                    endPoint = JSON_SERVER_ENDPOINT;
+
+                    const fields = [];
+                    const orders = [];
+                    args.sortModel.forEach(sM => {
+                        fields.push(sM.colId);
+                        orders.push(sM.sort)
+                    });
+
+                    // sorting
+                    endPoint += `?_sort=${fields.join(',')}&_order=${orders.join(',')}`;
+                    // starting from start row with a limit of endRow - startRows rows
+                    endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
                 } else {
                     endPoint = JSON_SERVER_ENDPOINT + `?_start=${args.startRow}&_end=${args.endRow}`;
                 }
