@@ -11,12 +11,7 @@ const {
 
 const axios = require('axios');
 
-
 const JSON_SERVER_ENDPOINT = `http://localhost:3000/olympicWinners`;
-
-function isRequestSorting(sortModel) {
-    return sortModel && sortModel.length > 0;
-}
 
 const OlympicWinnerType = new GraphQLObjectType({
     name: 'OlympicWinner',
@@ -89,7 +84,9 @@ const RootQuery = new GraphQLObjectType({
 
                 let endPoint;
 
-                if (isRequestSorting(args.sortModel)) {
+                const isRequestSorting = args.sortModel && args.sortModel.length > 0;
+
+                if (isRequestSorting) {
                     endPoint = JSON_SERVER_ENDPOINT;
 
                     const fields = [];
