@@ -82,13 +82,11 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve(parentValue, args) {
 
-                let endPoint;
+                let endPoint = JSON_SERVER_ENDPOINT;
 
                 const isRequestSorting = args.sortModel && args.sortModel.length > 0;
 
                 if (isRequestSorting) {
-                    endPoint = JSON_SERVER_ENDPOINT;
-
                     const fields = [];
                     const orders = [];
                     args.sortModel.forEach(sM => {
@@ -101,7 +99,7 @@ const RootQuery = new GraphQLObjectType({
                     // starting from start row with a limit of endRow - startRows rows
                     endPoint += `&_start=${args.startRow}&_limit=${args.endRow - args.startRow}`;
                 } else {
-                    endPoint = JSON_SERVER_ENDPOINT + `?_start=${args.startRow}&_end=${args.endRow}`;
+                    endPoint += `?_start=${args.startRow}&_end=${args.endRow}`;
                 }
 
                 return axios.get(endPoint)

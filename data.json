@@ -40,19 +40,6 @@
       "id": "2"
     },
     {
-      "athlete": "Natalie Coughlin",
-      "age": 25,
-      "country": "United States",
-      "year": 2008,
-      "date": "24/08/2008",
-      "sport": "Swimming",
-      "gold": 1,
-      "silver": 2,
-      "bronze": 3,
-      "total": 6,
-      "id": "3"
-    },
-    {
       "athlete": "Aleksey Nemov",
       "age": 24,
       "country": "Russia",
