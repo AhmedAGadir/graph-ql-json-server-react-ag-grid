@@ -119,7 +119,7 @@ const App: FunctionComponent = (): React.ReactElement => {
           <button onClick={addRowHandler} type="button" className="btn btn-secondary mx-2">Create Row</button>
           <button onClick={updateSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Update Selected Row</button>
           <button onClick={deleteSelectedRowHandler} type="button" className="btn btn-secondary mx-2">Delete Selected Row</button>
-          | <button onClick={purgeServerSideCacheHandler} type="button" className="btn btn-secondary mx-2">Purge SS Cache</button>
+          | <button onClick={purgeServerSideCacheHandler} type="button" className="btn btn-secondary mx-2">Refresh Rows</button>
         </div>
       </div>
       <div
