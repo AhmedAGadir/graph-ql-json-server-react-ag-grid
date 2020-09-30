@@ -81,9 +81,7 @@ const RootQuery = new GraphQLObjectType({
                 // valueCols: []
             },
             resolve(parentValue, args) {
-
                 let endPoint = JSON_SERVER_ENDPOINT;
-
                 const isRequestSorting = args.sortModel && args.sortModel.length > 0;
 
                 if (isRequestSorting) {
@@ -93,7 +91,6 @@ const RootQuery = new GraphQLObjectType({
                         fields.push(sM.colId);
                         orders.push(sM.sort)
                     });
-
                     // sorting
                     endPoint += `?_sort=${fields.join(',')}&_order=${orders.join(',')}`;
                     // starting from start row with a limit of endRow - startRows rows
